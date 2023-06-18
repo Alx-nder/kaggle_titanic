@@ -67,3 +67,9 @@ Xtest=transform_step(Xtest)
 
 Xtrain.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
 Xtest.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
+
+
+# test train split
+from sklearn import model_selection
+
+kag_X_train,kag_X_test,kag_y_train,kag_y_test=model_selection.train_test_split(Xtrain,ytrain,test_size=.3,random_state=2,stratify=ytrain)
