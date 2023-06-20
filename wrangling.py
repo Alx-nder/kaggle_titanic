@@ -6,7 +6,8 @@ import opendatasets as od
 raw_data=pd.read_csv('spaceship-titanic/train.csv')
 raw_data=raw_data[~raw_data['Cabin'].isnull()]
 
-
+raw_data=raw_data[~raw_data['HomePlanet'].isnull()]
+raw_data=raw_data[~raw_data['Destination'].isnull()]
 
 extract_cabin=raw_data.Cabin.str.split('/',expand=True)
 raw_data=raw_data.assign(Deck=extract_cabin[0])
@@ -17,7 +18,7 @@ ytrain=raw_data['Transported']
 
 def clean_dt(raw_data):
     return (raw_data
-    .drop(columns=['Name','PassengerId','Destination','HomePlanet','Age'])
+    .drop(columns=['Name','PassengerId',])
     .assign(
         RoomService=raw_data.RoomService.fillna(0).replace('nan',0),
         CryoSleep=raw_data.CryoSleep.fillna(False),
@@ -40,7 +41,7 @@ def transform_step(raw_data):
     raw_data.CryoSleep=label_encoder.fit_transform(raw_data.CryoSleep).astype(int)
     raw_data.Cabin=label_encoder.fit_transform(raw_data.Cabin).astype(int)
     # raw_data.VIP=label_encoder.fit_transform(raw_data.VIP)
-    # raw_data=pd.get_dummies(raw_data,columns=['Destination','HomePlanet'])
+    raw_data=pd.get_dummies(raw_data,columns=['Destination','HomePlanet'])
     raw_data=pd.get_dummies(raw_data,columns=['Deck'])
 
     return raw_data
@@ -65,8 +66,8 @@ raw_test=raw_test.assign(Deck=extract_cabin[0])
 Xtest=clean_dt(raw_test)
 Xtest=transform_step(Xtest)
 
-Xtrain.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
-Xtest.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
+# Xtrain.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
+# Xtest.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
 
 
 # test train split
