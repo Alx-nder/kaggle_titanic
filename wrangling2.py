@@ -18,22 +18,22 @@ ytrain=raw_data['Transported']
 def clean_dt(raw_data):
     return (raw_data
     .assign(
-        RoomService=raw_data.RoomService.fillna(0).replace('nan',0),
-        CryoSleep=raw_data.CryoSleep.fillna(False),
-        VIP=raw_data.VIP.fillna(False),
-        FoodCourt=raw_data.FoodCourt.fillna(0).replace('nan',0),
-        ShoppingMall=raw_data.ShoppingMall.fillna(0).replace('nan',0),
-        Spa=raw_data.Spa.fillna(0).replace('nan',0),
-        VRDeck=raw_data.VRDeck.fillna(0).replace('nan',0),
+        RoomService=raw_data.RoomService.fillna(raw_data.RoomService.mode()[0]).replace('nan',raw_data.RoomService.mode()[0]),
+        CryoSleep=raw_data.CryoSleep.fillna(raw_data.CryoSleep.mode()[0]),
+        VIP=raw_data.VIP.fillna(raw_data.VIP.mode()[0]),
+        FoodCourt=raw_data.FoodCourt.fillna(raw_data.FoodCourt.mode()[0]).replace('nan',raw_data.FoodCourt.mode()[0]),
+        ShoppingMall=raw_data.ShoppingMall.fillna(raw_data.ShoppingMall.mode()[0]).replace('nan',raw_data.ShoppingMall.mode()[0]),
+        Spa=raw_data.Spa.fillna(raw_data.Spa.mode()[0]).replace('nan',raw_data.Spa.mode()[0]),
+        VRDeck=raw_data.VRDeck.fillna(raw_data.VRDeck.mode()).replace('nan',raw_data.VRDeck.mode()[0]),
         # column that contains info on side Port or Starboard as true(starboard) or false(Port)
         Starboard=raw_data.Cabin.str.split('/',expand=True)[2]=='S',
         Deck=raw_data.Cabin.str.split('/',expand=True)[0],
 
         # take median age
-        Age=raw_data.Age.fillna(raw_data.Age.mode())
-        )
-        .drop(columns=['Name','PassengerId','Cabin'])
-     
+        Age=raw_data.Age.fillna(raw_data.Age.mode()[0])
+        )     
+    .drop(columns=['Name','PassengerId','Cabin'])
+
     )
 
  # encoding boolean labels to 0 or 1
@@ -75,4 +75,4 @@ Xtest=transform_step(Xtest)
 # test train split
 from sklearn import model_selection
 
-kag_X_train,kag_X_test,kag_y_train,kag_y_test=model_selection.train_test_split(Xtrain,ytrain,test_size=.3,random_state=2,stratify=ytrain)
+kag_X_train,kag_X_test,kag_y_train,kag_y_test=model_selection.train_test_split(Xtrain,ytrain,test_size=.25,random_state=2,stratify=ytrain)
