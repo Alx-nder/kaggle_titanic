@@ -4,71 +4,72 @@ import opendatasets as od
 # od.download("https://www.kaggle.com/competitions/spaceship-titanic")
 
 raw_data=pd.read_csv('spaceship-titanic/train.csv')
-raw_data=raw_data[~raw_data['Cabin'].isnull()]
 
+#remove raw null values 
+raw_data=raw_data[~raw_data['Cabin'].isnull()]
 raw_data=raw_data[~raw_data['HomePlanet'].isnull()]
 raw_data=raw_data[~raw_data['Destination'].isnull()]
 
-extract_cabin=raw_data.Cabin.str.split('/',expand=True)
-raw_data=raw_data.assign(Deck=extract_cabin[0])
 
 ytrain=raw_data['Transported']
 
 
-
+# function to handle other null values and do extra cleaning
 def clean_dt(raw_data):
     return (raw_data
     .drop(columns=['Name','PassengerId',])
     .assign(
         RoomService=raw_data.RoomService.fillna(0).replace('nan',0),
         CryoSleep=raw_data.CryoSleep.fillna(False),
-        VIP=raw_data.VIP.fillna(False).replace('nan',0),
+        VIP=raw_data.VIP.fillna(False),
         FoodCourt=raw_data.FoodCourt.fillna(0).replace('nan',0),
         ShoppingMall=raw_data.ShoppingMall.fillna(0).replace('nan',0),
         Spa=raw_data.Spa.fillna(0).replace('nan',0),
         VRDeck=raw_data.VRDeck.fillna(0).replace('nan',0),
+        # column that contains info on side Port or Starboard as true(starboard) or false(Port)
         Cabin=raw_data.Cabin.str.split('/',expand=True)[2]=='S',
+        Deck=raw_data.Cabin.str.split('/',expand=True)[0],
+
+        # take median age
         Age=raw_data.Age.fillna(raw_data.Age.median())
-        )
-     
+        )     
     )
 
- # encoding boolean labels
+ # encoding boolean labels to 0 or 1
 from sklearn import preprocessing
 
 def transform_step(raw_data):
     label_encoder=preprocessing.LabelEncoder()
+
     raw_data.CryoSleep=label_encoder.fit_transform(raw_data.CryoSleep).astype(int)
     raw_data.Cabin=label_encoder.fit_transform(raw_data.Cabin).astype(int)
+    
     # raw_data.VIP=label_encoder.fit_transform(raw_data.VIP)
+    
     raw_data=pd.get_dummies(raw_data,columns=['Destination','HomePlanet'])
     raw_data=pd.get_dummies(raw_data,columns=['Deck'])
 
     return raw_data
 
-res_encoder=preprocessing.LabelEncoder()
 
+# encode validation
+res_encoder=preprocessing.LabelEncoder()
 ytrain=res_encoder.fit_transform(ytrain)
 
-  
+# clean train
 Xtrain=clean_dt(raw_data)
+# transform train
 Xtrain=transform_step(Xtrain)
 Xtrain.drop(columns=['Transported'],inplace=True)   
 
-# cabins=Xtrain.Cabin.str.split('/',expand=True),
-# cabins
 
+# test
 raw_test=pd.read_csv('spaceship-titanic/test.csv')
 
-extract_cabin=raw_test.Cabin.str.split('/',expand=True)
-raw_test=raw_test.assign(Deck=extract_cabin[0])
-
+# clean test
 Xtest=clean_dt(raw_test)
+# transform test
 Xtest=transform_step(Xtest)
-
-# Xtrain.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
-# Xtest.drop(columns=['Deck_A','Deck_D','Deck_E','Deck_F','Deck_G','Deck_T'],inplace=True)
-
 
 # test train split
 from sklearn import model_selection
