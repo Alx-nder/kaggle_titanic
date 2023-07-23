@@ -6,9 +6,9 @@ import opendatasets as od
 raw_data=pd.read_csv('spaceship-titanic/train.csv')
 
 #remove raw null values 
-raw_data=raw_data[~raw_data['Cabin'].isnull()]
-raw_data=raw_data[~raw_data['HomePlanet'].isnull()]
-raw_data=raw_data[~raw_data['Destination'].isnull()]
+# raw_data=raw_data[~raw_data['Cabin'].isnull()]
+# raw_data=raw_data[~raw_data['HomePlanet'].isnull()]
+# raw_data=raw_data[~raw_data['Destination'].isnull()]
 
 
 ytrain=raw_data['Transported']
