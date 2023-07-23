@@ -27,7 +27,7 @@ def clean_dt(raw_data):
         Spa=raw_data.Spa.fillna(0).replace('nan',0),
         VRDeck=raw_data.VRDeck.fillna(0).replace('nan',0),
         # column that contains info on side Port or Starboard as true(starboard) or false(Port)
-        Cabin=raw_data.Cabin.str.split('/',expand=True)[2]=='S',
+        CabinSide=raw_data.Cabin.str.split('/',expand=True)[2]=='S',
         Deck=raw_data.Cabin.str.split('/',expand=True)[0],
 
         # take median age
@@ -42,7 +42,7 @@ def transform_step(raw_data):
     label_encoder=preprocessing.LabelEncoder()
 
     raw_data.CryoSleep=label_encoder.fit_transform(raw_data.CryoSleep).astype(int)
-    raw_data.Cabin=label_encoder.fit_transform(raw_data.Cabin).astype(int)
+    raw_data.CabinSide=label_encoder.fit_transform(raw_data.CabinSide).astype(int)
     
     # raw_data.VIP=label_encoder.fit_transform(raw_data.VIP)
     
