@@ -29,7 +29,9 @@ def clean_dt(raw_data):
         Starboard=raw_data.Cabin.str.split('/',expand=True)[2]=='S',
         Deck=raw_data.Cabin.str.split('/',expand=True)[0],
 
-        # take median age
+# try to find mode for null cabin values
+
+        # take mode age
         Age=raw_data.Age.fillna(raw_data.Age.mode()[0])
         )     
     .drop(columns=['Name','PassengerId','Cabin'])
