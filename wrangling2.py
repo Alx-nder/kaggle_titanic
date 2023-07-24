@@ -26,7 +26,7 @@ def clean_dt(raw_data):
         Spa=raw_data.Spa.fillna(raw_data.Spa.mode()[0]).replace('nan',raw_data.Spa.mode()[0]),
         VRDeck=raw_data.VRDeck.fillna(raw_data.VRDeck.mode()).replace('nan',raw_data.VRDeck.mode()[0]),
         # column that contains info on side Port or Starboard as true(starboard) or false(Port)
-        Starboard=raw_data.Cabin.str.split('/',expand=True)[2]=='S',
+        Starboard=raw_data.Cabin.str.split('/',expand=True)[2]=='P',
         Deck=raw_data.Cabin.str.split('/',expand=True)[0],
 
 # try to find mode for null cabin values
