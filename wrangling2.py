@@ -78,3 +78,5 @@ Xtest=transform_step(Xtest)
 from sklearn import model_selection
 
 kag_X_train,kag_X_test,kag_y_train,kag_y_test=model_selection.train_test_split(Xtrain,ytrain,test_size=.25,random_state=2,stratify=ytrain)
+
+#  the next step is to use cabin and fill nulls with mode value with both deck and side also try to consolidate room number  
