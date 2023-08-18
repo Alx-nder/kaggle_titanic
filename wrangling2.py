@@ -1,7 +1,7 @@
 import pandas as pd
 import opendatasets as od
 
-# od.download("https://www.kaggle.com/competitions/spaceship-titanic")
+od.download("https://www.kaggle.com/competitions/spaceship-titanic")
 
 raw_data=pd.read_csv('spaceship-titanic/train.csv')
 
