@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# no missing values,
-# replace nan with random 
-
-# In[88]:
 
 
 import pandas as pd
@@ -12,32 +5,17 @@ import opendatasets as od
 import random
 
 
-# In[89]:
-
 
 # od.download("https://www.kaggle.com/competitions/spaceship-titanic")
 
 
-# In[90]:
 
 
 raw_data=pd.read_csv("/Users/Tyreek ALEXANDER/Documents/kaggle_titanic/spaceship-titanic/train.csv")
-# raw_data=raw_data[~raw_data['Cabin'].isnull()]
-
-
-# In[91]:
-
-
-raw_data.Destination.value_counts(dropna=False)
-
-
-# In[92]:
 
 
 ytrain=raw_data['Transported']
 
-
-# In[93]:
 
 
 def clean_dt(raw_data):
@@ -66,10 +44,6 @@ def clean_dt(raw_data):
     )
 
 
-
-# In[94]:
-
-
 # encoding boolean labels
 from sklearn import preprocessing
 
@@ -86,14 +60,8 @@ def transform_step(raw_data):
    return raw_data
 
 
-# In[95]:
-
-
 res_encoder=preprocessing.LabelEncoder()
 ytrain=res_encoder.fit_transform(ytrain)
-
-
-# In[96]:
 
 
 Xtrain=clean_dt(raw_data)
@@ -101,7 +69,6 @@ Xtrain=transform_step(Xtrain)
 Xtrain.drop(columns=['Transported'],inplace=True)   
 
 
-# In[97]:
 
 
 raw_test=pd.read_csv('/Users/Tyreek ALEXANDER/Documents/kaggle_titanic/spaceship-titanic/test.csv')
@@ -110,7 +77,9 @@ Xtest=clean_dt(raw_test)
 Xtest=transform_step(Xtest)
 
 
-# In[ ]:
+from sklearn import model_selection
+
+kag_X_train,kag_X_test,kag_y_train,kag_y_test=model_selection.train_test_split(Xtrain,ytrain,shuffle=True)
 
 
 # python -m jupyter nbconvert --to python full_wrangling.ipynb 
