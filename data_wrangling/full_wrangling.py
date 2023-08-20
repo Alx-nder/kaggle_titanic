@@ -79,7 +79,7 @@ Xtest=transform_step(Xtest)
 
 from sklearn import model_selection
 
-kag_X_train,kag_X_test,kag_y_train,kag_y_test=model_selection.train_test_split(Xtrain,ytrain,shuffle=True)
+kag_X_train,kag_X_test,kag_y_train,kag_y_test=model_selection.train_test_split(Xtrain,ytrain,random_state=69,stratify=ytrain)
 
 
 # python -m jupyter nbconvert --to python full_wrangling.ipynb 
